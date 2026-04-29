@@ -4,7 +4,7 @@ const { spawn } = require("child_process");
 const app = express();
 const PORT = process.env.PORT || 8080;
 
-const M3U8_URL = "http://air.pc.cdn.bitgravity.com/air/live/pbaudio279/playlist.m3u8";
+const M3U8_URL = "https://stream-177.zeno.fm/ijklcild1wrtv?zt=eyJhbGciOiJIUzI1NiJ9.eyJzdHJlYW0iOiJpamtsY2lsZDF3cnR2IiwiaG9zdCI6InN0cmVhbS0xNzcuemVuby5mbSIsInJ0dGwiOjUsImp0aSI6IjYwd3ZPdVAzVF82OXBaMU9FSW52N2ciLCJpYXQiOjE3Nzc0NzU2NTUsImV4cCI6MTc3NzQ3NTcxNX0.-TpbOxhq4v-DmSEiBKvxSY7fQDDY4LQ4X31SRh6kYhs";
 
 app.get("/", (req, res) => {
   res.send("Relay Running");
