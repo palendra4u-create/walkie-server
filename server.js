@@ -4,7 +4,7 @@ const { spawn } = require("child_process");
 const app = express();
 const PORT = process.env.PORT || 8080;
 
-const M3U8_URL = "https://air.pc.cdn.bitgravity.com/air/live/pbaudio001/playlist.m3u8";
+const M3U8_URL = "https://servidor19.brlogic.com:7002/live";
 
 app.get("/", (req, res) => {
   res.send("Relay Running");
