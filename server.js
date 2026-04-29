@@ -1,21 +1,34 @@
-const WebSocket = require('ws');
+const express = require("express");
+const { spawn } = require("child_process");
 
-const server = new WebSocket.Server({ port: 10000 });
+const app = express();
+const PORT = process.env.PORT || 3000;
 
-server.on('connection', (ws) => {
-  console.log("Client Connected");
+// Apna M3U8 link yahan daalo
+const M3U8_URL = "https://example.com/live/stream.m3u8";
 
-  ws.on('message', (message) => {
-    server.clients.forEach(client => {
-      if (client !== ws && client.readyState === WebSocket.OPEN) {
-        client.send(message);
-      }
-    });
-  });
+app.get("/radio.mp3", (req, res) => {
+    res.setHeader("Content-Type", "audio/mpeg");
 
-  ws.on('close', () => {
-    console.log("Client disconnected");
-  });
+    const ffmpeg = spawn("ffmpeg", [
+        "-reconnect", "1",
+        "-reconnect_streamed", "1",
+        "-reconnect_delay_max", "5",
+        "-i", M3U8_URL,
+        "-vn",
+        "-c:a", "libmp3lame",
+        "-b:a", "128k",
+        "-f", "mp3",
+        "pipe:1"
+    ]);
+
+    ffmpeg.stdout.pipe(res);
+
+    ffmpeg.stderr.on("data", d => console.log(d.toString()));
+
+    req.on("close", () => ffmpeg.kill("SIGINT"));
 });
 
-console.log("Server running...");
+app.listen(PORT, () => {
+    console.log(`Running on ${PORT}`);
+});
